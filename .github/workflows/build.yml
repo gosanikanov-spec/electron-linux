@@ -16,11 +16,20 @@ jobs:
       image: archlinux:latest
       options: --privileged
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install archiso
         run: pacman -Syu --noconfirm archiso
       - name: Build ISO
-        run: BUILD_DIR=/tmp/build bash ./build.sh ${{ matrix.variant }}
+        shell: bash
+        run: |
+          set -o pipefail
+          BUILD_DIR=/tmp/build bash ./build.sh ${{ matrix.variant }} 2>&1 | tee build.log
+      - name: Report failure reason
+        if: failure()
+        shell: bash
+        run: |
+          msg=$(tail -n 40 build.log | tr -d '\r' | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+          echo "::error title=Build log (last 40 lines)::$msg"
       - uses: actions/upload-artifact@v4
         with:
           name: electron-linux-${{ matrix.variant }}
