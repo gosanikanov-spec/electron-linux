@@ -46,7 +46,7 @@ attaches the ISOs to a GitHub Release.
 
 ### Arch Linux
 ```bash
-sudo pacman -S archiso
+sudo pacman -S archiso grub
 sudo ./build.sh minimal      # or: desktop
 ```
 

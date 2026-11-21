@@ -6,7 +6,8 @@ set -euo pipefail
 VARIANT="${1:-minimal}"
 case "$VARIANT" in minimal|desktop) ;; *) echo "Variant must be 'minimal' or 'desktop'"; exit 1 ;; esac
 [[ $EUID -eq 0 ]] || { echo "Run as root"; exit 1; }
-command -v mkarchiso >/dev/null || { echo "Install archiso first: pacman -S archiso"; exit 1; }
+command -v mkarchiso >/dev/null || { echo "Install archiso first: pacman -S archiso grub"; exit 1; }
+command -v grub-install >/dev/null || { echo "Install grub first: pacman -S grub"; exit 1; }
 
 SRC="$(cd "$(dirname "$0")" && pwd)"
 BASE=/usr/share/archiso/configs/baseline     # upstream minimal profile: known-good boot config
