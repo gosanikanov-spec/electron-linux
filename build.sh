@@ -34,8 +34,9 @@ rm -f "$SYS"/multi-user.target.wants/{systemd-networkd,iwd}.service \
       "$SYS"/network-online.target.wants/systemd-networkd-wait-online.service
 ln -sf /usr/lib/systemd/system/NetworkManager.service "$SYS/multi-user.target.wants/NetworkManager.service"
 if [[ "$VARIANT" == desktop ]]; then
-  ln -sf /usr/lib/systemd/system/lightdm.service "$SYS/display-manager.service"
-  mkdir -p "$SYS/graphical.target.wants"
+  # greetd owns tty1 and autologins into Hyprland, so drop the console autologin
+  rm -rf "$SYS/getty@tty1.service.d"
+  ln -sf /usr/lib/systemd/system/greetd.service "$SYS/display-manager.service"
   ln -sf /usr/lib/systemd/system/graphical.target "$SYS/default.target"
 fi
 

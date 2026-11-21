@@ -1,0 +1,12 @@
+[terminal]
+vt = 1
+
+# Shown after logging out of Hyprland
+[default_session]
+command = "tuigreet --time --remember --cmd Hyprland"
+user = "greeter"
+
+# First boot: log the live user straight into Hyprland
+[initial_session]
+command = "Hyprland"
+user = "live"

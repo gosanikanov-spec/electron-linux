@@ -14,7 +14,23 @@ A clean, minimal, **Arch-based** Linux distribution built with [archiso](https:/
 | Variant   | Contents                                                              |
 |-----------|-----------------------------------------------------------------------|
 | `minimal` | Console system: NetworkManager (`nmtui`), SSH, htop, nano, archinstall |
-| `desktop` | Minimal plus Xfce, LightDM, PipeWire audio, Firefox                    |
+| `desktop` | Minimal plus **Hyprland** (Wayland), Waybar, Wofi, Kitty, PipeWire, Firefox |
+
+### Hyprland keys (desktop)
+
+| Keys              | Action               |
+|-------------------|----------------------|
+| `Super + Enter`   | Terminal (kitty)     |
+| `Super + D`       | App launcher (wofi)  |
+| `Super + B` / `E` | Firefox / Files      |
+| `Super + Q`       | Close window         |
+| `Super + F` / `V` | Fullscreen / Float   |
+| `Super + 1–5`     | Switch workspace (`+ Shift` moves the window) |
+| `Print`           | Screenshot region to clipboard |
+| `Super + Shift + M` | Log out            |
+
+Edit `~/.config/hypr/hyprland.conf` to customize. Hyprland needs 3D acceleration: in a VM,
+turn on 3D (VMware, VirtualBox with VMSVGA, or QEMU with `virtio-vga-gl`).
 
 ## Building
 
@@ -40,7 +56,7 @@ The ISO and its `.sha256` checksum are written to `out/`.
 
 - **USB:** flash with Rufus (DD mode), balenaEtcher, or `dd`. In a **VM**, boot the ISO directly (turn Secure Boot off).
 - You're logged in automatically as `live` (no password, passwordless `sudo`).
-- To install to disk, run `sudo archinstall`. On the desktop variant, open a terminal first.
+- To install to disk, run `sudo archinstall`. On the desktop variant, open a terminal first (`Super + Enter`).
 
 ## Layout
 
