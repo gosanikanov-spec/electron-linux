@@ -6,8 +6,8 @@ A clean, minimal, Arch-based Linux. No bloat, no telemetry, rolling updates from
 |---|---|---|
 | **PC Desktop** (Hyprland) | Windows/Linux PC, Intel or AMD | `electron-linux-desktop-…-x86_64.iso` |
 | **PC Minimal** (console) | Windows/Linux PC, Intel or AMD | `electron-linux-minimal-…-x86_64.iso` |
-| **Mac Desktop** (Hyprland) | Apple Silicon Mac (M1–M4) in UTM | `electron-linux-desktop-aarch64.qcow2` |
-| **Mac Minimal** (console) | Apple Silicon Mac (M1–M4) in UTM | `electron-linux-minimal-aarch64.qcow2` |
+| **Mac Desktop** (Hyprland) | Any Apple Silicon Mac (M-series) in UTM | `electron-linux-desktop-aarch64.qcow2` |
+| **Mac Minimal** (console) | Any Apple Silicon Mac (M-series) in UTM | `electron-linux-minimal-aarch64.qcow2` |
 
 Each file has a matching `.sha256` checksum.
 

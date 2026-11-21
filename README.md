@@ -34,7 +34,7 @@ turn on 3D (VMware, VirtualBox with VMSVGA, or QEMU with `virtio-vga-gl`).
 
 ## Apple Silicon Macs (UTM)
 
-For M1–M4 Macs there's a native **ARM64** build based on [Arch Linux ARM](https://archlinuxarm.org/).
+For Apple Silicon Macs (any M-series chip) there's a native **ARM64** build based on [Arch Linux ARM](https://archlinuxarm.org/).
 It's a ready-to-boot disk image (`electron-linux-<variant>-aarch64.qcow2`) rather than an ISO.
 It's an installed system, so changes you make inside the VM are kept.
 
