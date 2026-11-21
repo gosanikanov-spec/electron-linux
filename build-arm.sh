@@ -143,7 +143,8 @@ initrd  /initramfs-linux.img
 options root=PARTUUID=$ROOT_PARTUUID rw quiet
 EOF
 
-# Clean up
+# Clean up: hardware firmware is useless in a VM (kept if something depends on it)
+pacman -Rns --noconfirm linux-firmware 2>/dev/null || true
 pacman -Scc --noconfirm
 rm -rf /var/cache/pacman/pkg/* /root/pkgs.txt /root/setup.sh
 gpgconf --homedir /etc/pacman.d/gnupg --kill all 2>/dev/null || true
@@ -153,6 +154,9 @@ echo ">> Configuring system inside the image"
 arch-chroot "$MNT" /bin/bash /root/setup.sh "$VARIANT" "$ROOT_PARTUUID"
 
 # --- Finish -----------------------------------------------------------------
+# Discard freed blocks (deleted package downloads etc.) so they don't bloat the image
+fstrim -v "$MNT/boot" || true
+fstrim -v "$MNT" || true
 cleanup; LOOP=""; trap - EXIT
 NAME="electron-linux-$VARIANT-aarch64.qcow2"
 echo ">> Compressing to $NAME"
