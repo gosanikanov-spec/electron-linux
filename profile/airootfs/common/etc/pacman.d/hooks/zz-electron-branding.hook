@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = filesystem
+
+[Action]
+Description = Applying Electron Linux branding...
+When = PostTransaction
+Exec = /bin/sh /etc/electron-linux/branding.sh

@@ -1,0 +1,21 @@
+# Shared by every variant. Upstream archiso baseline packages are added automatically.
+base
+linux
+linux-firmware
+intel-ucode
+amd-ucode
+mkinitcpio
+mkinitcpio-archiso
+sudo
+networkmanager
+openssh
+bash-completion
+nano
+less
+man-db
+man-pages
+htop
+curl
+pacman-contrib
+# Guided installer to put Electron Linux on disk
+archinstall

@@ -1,0 +1,6 @@
+
+  Welcome to Electron Linux — a clean, minimal Arch-based system.
+    Install to disk:   sudo archinstall
+    Wi-Fi:             nmtui
+    Install software:  sudo pacman -S <package>
+

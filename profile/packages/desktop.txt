@@ -1,0 +1,23 @@
+# Desktop: lightweight Xfce. No office suite, games, or extras.
+xorg-server
+mesa
+lightdm
+lightdm-gtk-greeter
+xfce4
+mousepad
+ristretto
+xfce4-notifyd
+xfce4-pulseaudio-plugin
+network-manager-applet
+polkit-gnome
+gvfs
+xdg-user-dirs
+pipewire
+pipewire-pulse
+pipewire-alsa
+wireplumber
+pavucontrol
+firefox
+noto-fonts
+noto-fonts-emoji
+papirus-icon-theme

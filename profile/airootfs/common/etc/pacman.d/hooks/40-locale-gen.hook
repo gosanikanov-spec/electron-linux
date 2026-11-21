@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = glibc
+
+[Action]
+Description = Generating en_US.UTF-8 locale...
+When = PostTransaction
+Depends = glibc
+Exec = /bin/sh -c "sed -i 's/^#\(en_US\.UTF-8 UTF-8\)/\1/' /etc/locale.gen && locale-gen"
