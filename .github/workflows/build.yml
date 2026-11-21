@@ -5,6 +5,9 @@ on:
     branches: [main]
     tags: ["v*"]
 
+permissions:
+  contents: write   # for attaching images to releases on tags
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,6 +36,41 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: electron-linux-${{ matrix.variant }}
+          path: out/*
+          compression-level: 0
+      - name: Attach to release (tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*
+
+  # ARM64 disk images for UTM on Apple Silicon Macs (Arch Linux ARM based)
+  build-arm:
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [minimal, desktop]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install host tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y arch-install-scripts libarchive-tools gdisk dosfstools e2fsprogs qemu-utils
+      - name: Build ARM64 image
+        shell: bash
+        run: |
+          set -o pipefail
+          sudo WORK_DIR=/tmp/arm-build bash ./build-arm.sh ${{ matrix.variant }} 2>&1 | tee build.log
+      - name: Report failure reason
+        if: failure()
+        shell: bash
+        run: |
+          msg=$(tail -n 40 build.log | tr -d '\r' | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+          echo "::error title=Build log (last 40 lines)::$msg"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: electron-linux-${{ matrix.variant }}-arm64-utm
           path: out/*
           compression-level: 0
       - name: Attach to release (tags only)
