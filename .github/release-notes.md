@@ -14,7 +14,7 @@ Each file has a matching `.sha256` checksum.
 ## PC (ISO): try it without installing
 1. Flash the ISO to a USB stick with Rufus (DD mode) or balenaEtcher, or boot it in VMware Workstation Pro with 3D acceleration on.
 2. Boot from the stick (Secure Boot off). Nothing on your PC is changed.
-3. To install it permanently, run `sudo archinstall`.
+3. To install it permanently: on the Desktop ISO press **Super + I** to open the graphical installer. On the Minimal ISO, run `sudo archinstall`.
 
 ## Mac (UTM)
 1. In UTM, click **+** → **Virtualize** → **Linux** and leave the ISO empty. Give it 4 GB RAM and 4 cores, then save.

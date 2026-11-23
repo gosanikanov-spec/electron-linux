@@ -19,7 +19,14 @@ rm -rf "$BUILD"; mkdir -p "$PROFILE" "$OUT"
 cp -a "$BASE/." "$PROFILE/"
 
 # --- Packages: upstream baseline (bootloader, initramfs hooks) + ours ---------
-cat "$BASE/packages.x86_64" "$SRC/profile/packages/base.txt" "$SRC/profile/packages/$VARIANT.txt" \
+LISTS=("$BASE/packages.x86_64" "$SRC/profile/packages/base.txt" "$SRC/profile/packages/$VARIANT.txt")
+if [[ "$VARIANT" == desktop ]]; then
+  # Graphical installer (Calamares) comes from a local repo built by build-aur.sh
+  [[ -f "$SRC/repo/electron-local.db.tar.gz" ]] || { echo "Run ./build-aur.sh first (builds the Calamares installer)"; exit 1; }
+  command -v rsvg-convert >/dev/null || { echo "Install librsvg first: pacman -S librsvg"; exit 1; }
+  LISTS+=("$SRC/profile/packages/installer.txt")
+fi
+cat "${LISTS[@]}" \
   | sed 's/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//' | { grep -v '^$' || true; } | sort -u \
   > "$PROFILE/packages.x86_64"
 
@@ -41,6 +48,48 @@ if [[ "$VARIANT" == desktop ]]; then
   ln -sf /usr/lib/systemd/system/graphical.target "$SYS/default.target"
 fi
 
+# --- Graphical installer (desktop only) --------------------------------------
+if [[ "$VARIANT" == desktop ]]; then
+  ROOTFS="$PROFILE/airootfs"
+  CAL="$ROOTFS/etc/calamares"
+  mkdir -p "$CAL"
+  cp -r "$SRC/profile/installer/calamares/." "$CAL/"
+  BR="$CAL/branding/electron"
+  rsvg-convert -w 256 -h 256 "$BR/logo.svg" -o "$BR/logo.png"
+  rsvg-convert -w 400 -h 400 "$BR/logo.svg" -o "$BR/welcome.png"
+
+  # The installed user's Hyprland config comes from /etc/skel
+  mkdir -p "$ROOTFS/etc/skel/.config/hypr"
+  cp "$ROOTFS/home/live/.config/hypr/hyprland.conf" "$ROOTFS/etc/skel/.config/hypr/"
+
+  # Live session only: installer shortcut, app-menu entry and a hint notification
+  cat >> "$ROOTFS/home/live/.config/hypr/hyprland.conf" <<'EOF'
+
+# --- Live session only (removed by the installer) ---
+bind = $mod, I, exec, sudo -E calamares
+exec-once = sleep 3 && notify-send -t 20000 "Welcome to Electron Linux" "Try it out, then press Super+I (or search 'Install' with Super+D) to install it to disk."
+EOF
+  mkdir -p "$ROOTFS/usr/share/applications"
+  cat > "$ROOTFS/usr/share/applications/electron-install.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=Install Electron Linux
+Comment=Install Electron Linux to this computer
+Exec=sudo -E calamares
+Icon=/etc/calamares/branding/electron/logo.png
+Terminal=false
+Categories=System;
+EOF
+
+  # Use the locally built AUR packages (Calamares and its AUR dependencies)
+  cat >> "$PROFILE/pacman.conf" <<EOF
+
+[electron-local]
+SigLevel = Optional TrustAll
+Server = file://$SRC/repo
+EOF
+fi
+
 # --- Boot menu branding ------------------------------------------------------
 { grep -rl 'Arch Linux' "$PROFILE"/efiboot "$PROFILE"/syslinux "$PROFILE"/grub 2>/dev/null || true; } \
   | xargs -r sed -i 's/Arch Linux/Electron Linux/g'
@@ -53,6 +102,9 @@ iso_name="electron-linux-$VARIANT"
 iso_label="ELECTRON_\$(date --date="@\${SOURCE_DATE_EPOCH:-\$(date +%s)}" +%Y%m)"
 iso_publisher="Electron Linux"
 iso_application="Electron Linux ($VARIANT)"
+# squashfs (not erofs): the graphical installer copies this image to disk
+airootfs_image_type="squashfs"
+airootfs_image_tool_options=('-comp' 'xz' '-Xbcj' 'x86' '-b' '1M' '-Xdict-size' '1M')
 file_permissions+=(
   ["/etc/shadow"]="0:0:400"
   ["/etc/gshadow"]="0:0:400"

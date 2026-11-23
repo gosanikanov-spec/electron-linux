@@ -1,0 +1,35 @@
+---
+componentName: electron
+
+welcomeStyleCalamares: false
+welcomeExpandingLogo: true
+windowExpanding: normal
+windowSize: 960px,640px
+windowPlacement: center
+sidebar: widget
+navigation: widget
+
+strings:
+  productName:         "Electron Linux"
+  shortProductName:    "Electron"
+  version:             "1.1"
+  shortVersion:        "1.1"
+  versionedName:       "Electron Linux"
+  shortVersionedName:  "Electron"
+  bootloaderEntryName: "Electron Linux"
+  productUrl:          "https://github.com/gosanikanov-spec/electron-linux"
+  supportUrl:          "https://github.com/gosanikanov-spec/electron-linux/issues"
+
+images:
+  productLogo:    "logo.png"
+  productIcon:    "logo.png"
+  productWelcome: "welcome.png"
+
+slideshow: "show.qml"
+slideshowAPI: 2
+
+style:
+  SidebarBackground:        "#0b1020"
+  SidebarText:              "#e6f2ff"
+  SidebarTextCurrent:       "#ffffff"
+  SidebarBackgroundCurrent: "#1d6fd6"

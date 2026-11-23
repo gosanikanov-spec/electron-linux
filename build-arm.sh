@@ -75,6 +75,7 @@ OVL="$WORK/overlay"; mkdir -p "$OVL"
 cp -r "$SRC/profile/airootfs/common/." "$OVL/"
 [[ -d "$SRC/profile/airootfs/$VARIANT" ]] && cp -r "$SRC/profile/airootfs/$VARIANT/." "$OVL/"
 rm -f "$OVL"/etc/{passwd,shadow,group,gshadow}       # users are created with useradd instead
+rm -f "$OVL"/etc/pacman.d/mirrorlist                  # keep Arch Linux ARM's own mirrors
 [[ "$VARIANT" == desktop ]] && rm -rf "$OVL/etc/systemd/system/getty@tty1.service.d"
 cp -r "$OVL/." "$MNT/"
 cat > "$MNT/etc/motd" <<'EOF'

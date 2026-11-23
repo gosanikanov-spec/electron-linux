@@ -1,0 +1,13 @@
+# Graphical installer (PC desktop ISO only). calamares comes from the local AUR repo (build-aur.sh).
+calamares
+qt6-wayland
+# What Calamares needs to partition, copy the system and install the bootloader
+rsync
+grub
+efibootmgr
+os-prober
+dosfstools
+btrfs-progs
+xfsprogs
+# Live-session "how to install" notification
+libnotify

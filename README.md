@@ -7,14 +7,14 @@ A clean, minimal, **Arch-based** Linux distribution built with [archiso](https:/
 - **No telemetry**
 - **Lean image**: docs and non-English translations aren't installed
 - **Boots anywhere**: UEFI and BIOS, from USB or a VM, with Intel/AMD microcode and firmware included
-- **Installs with `archinstall`**: guided install to disk from the live session
+- **Graphical installer**: Calamares with Electron Linux branding (desktop ISO); `archinstall` on the minimal ISO
 
 ## Variants
 
 | Variant   | Contents                                                              |
 |-----------|-----------------------------------------------------------------------|
 | `minimal` | Console system: NetworkManager (`nmtui`), SSH, htop, nano, archinstall |
-| `desktop` | Minimal plus **Hyprland** (Wayland), Waybar, Wofi, Kitty, PipeWire, Firefox |
+| `desktop` | Minimal plus **Hyprland** (Wayland), Waybar, Wofi, Kitty, PipeWire, Firefox, graphical installer |
 
 ### Hyprland keys (desktop)
 
@@ -78,7 +78,8 @@ sudo ./build-arm.sh desktop      # or: minimal
 
 - **USB:** flash with Rufus (DD mode), balenaEtcher, or `dd`. In a **VM**, boot the ISO directly (turn Secure Boot off).
 - You're logged in automatically as `live` (no password, passwordless `sudo`).
-- To install to disk, run `sudo archinstall`. On the desktop variant, open a terminal first (`Super + Enter`).
+- **Desktop ISO:** press `Super + I`, or search "Install" with `Super + D`, to open the graphical installer. It handles partitioning (including alongside Windows), encryption, your user account and the bootloader.
+- **Minimal ISO:** run `sudo archinstall` for a guided text install.
 
 ## Layout
 
@@ -93,3 +94,12 @@ profile/airootfs/desktop/      Extra files for the desktop variant
 
 To add a package, put it in a `profile/packages/*.txt` file. To add a file to the system,
 place it under `profile/airootfs/common/` at the path it should have.
+
+## Graphical installer
+
+The desktop ISO includes [Calamares](https://calamares.io/), the same installer Archcraft, EndeavourOS
+and Manjaro use, with Electron Linux branding and a slideshow. It copies the live system to disk,
+then removes the live-only parts: the `live` user, autologin, and the installer itself.
+
+Calamares isn't in the official Arch repos, so `build-aur.sh` compiles it from the AUR into a local
+`repo/` that `build.sh` uses. CI does this automatically. Its config is in `profile/installer/calamares/`.

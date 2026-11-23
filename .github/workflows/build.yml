@@ -22,7 +22,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Install archiso
-        run: pacman -Syu --noconfirm archiso grub
+        run: pacman -Syu --noconfirm archiso grub librsvg
+      - name: Build graphical installer (Calamares, from AUR)
+        if: matrix.variant == 'desktop'
+        shell: bash
+        run: |
+          set -o pipefail
+          bash ./build-aur.sh 2>&1 | tee build.log
       - name: Build ISO
         shell: bash
         run: |
